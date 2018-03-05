@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.0.0",
-    "redis": "^2.8.0"
-  }
+    "redis": "^2.8.0",
+    "winston": "^3.0.0-rc1"
+  },
+  "devDependencies": {}
 }

@@ -2,6 +2,7 @@ const config = require("./config");
 const api = require("./api");
 const calc = require("./calc");
 const Stack = require("./mem");
+const logger = require("./logger")(module);
 
 /**
  * Timeout function that waits for a specified number of milliseconds
@@ -36,6 +37,18 @@ async function loop() {
     // Filter out failed API price call indices from volume data
     volumes = volumes.filter((_, i) => !failedIndices.includes(i));
 
+    logger.log({
+      level: "info",
+      message: "Prices fetched: " + api.exchanges.map((name, index) => `${name}: ${Math.round(prices[index])}$`
+      )
+    });
+
+    logger.log({
+      level: "info",
+      message: "24h volumes fetched: " + api.exchanges.map((name, index) => `${name}: ${Math.round(volumes[index])}$`
+      )
+    });
+
     // Sum of volumes of all exchanges
     const sumOfVolumes = calc.sum(volumes);
 
@@ -57,12 +70,18 @@ async function loop() {
     }
 
     // Print out the newest price
-    console.log(Stack.prices["ETHUSD"][Stack.prices["ETHUSD"].length - 1]);
+    logger.log({
+      level: "info",
+      message: "Latest price calculated: " + Stack.prices["ETHUSD"][Stack.prices["ETHUSD"].length - 1]
+    });
 
     // Wait for POLL_INTERVAL
     await timeout(config.env.POLL_INTERVAL);
   } catch (e) {
-    console.log(e.toString());
+    logger.log({
+      level: "error",
+      message: "There was an error in fetching prices and/or volumes: " + e.toString()
+    });
   }
 
   // Start another iteration
@@ -73,6 +92,6 @@ async function loop() {
 loop();
 
 // Allow CTRL+C to end program execution
-process.on("SIGINT", function() {
+process.on("SIGINT", function () {
   process.exit();
 });
