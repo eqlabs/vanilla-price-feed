@@ -1,5 +1,6 @@
+## Developing
 ```bash
-make build
+make redis
 make dev
 ```
 
