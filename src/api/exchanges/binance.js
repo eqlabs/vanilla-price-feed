@@ -1,5 +1,5 @@
-const config = require("../config");
-const fetchJSON = require("./fetchJSON");
+const config = require("../../config");
+const fetchJSON = require("../fetchJSON");
 
 const ETHUSD = config.priceURLs.ETHUSD.binance;
 const VOLUME = config.volumeURLs.ETHUSD.binance;
