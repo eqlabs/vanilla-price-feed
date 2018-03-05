@@ -1,7 +1,7 @@
 .PHONY: dev build clear
 
 dev:
-	make build-quiet && docker run -it --rm --name dev --link price-redis:redis price-ticker
+	make build-quiet && docker run -it --rm --env NODE_ENV=development --name dev --link price-redis:redis price-ticker
 
 build:
 	docker build -t price-ticker .

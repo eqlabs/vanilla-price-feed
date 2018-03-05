@@ -39,13 +39,13 @@ async function loop() {
 
     logger.log({
       level: "info",
-      message: "Prices fetched: " + api.exchanges.map((name, index) => `${name}: ${Math.round(prices[index])}$`
+      message: "Prices fetched:" + api.exchanges.map((name, index) => ` ${name}: ${Math.round(prices[index])}$`
       )
     });
 
     logger.log({
       level: "info",
-      message: "24h volumes fetched: " + api.exchanges.map((name, index) => `${name}: ${Math.round(volumes[index])}$`
+      message: "24h volumes fetched:" + api.exchanges.map((name, index) => ` ${name}: ${Math.round(volumes[index])}$`
       )
     });
 

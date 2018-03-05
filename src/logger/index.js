@@ -10,13 +10,6 @@ function logFormat() {
   );
 }
 
-const logger = createLogger({
-  level: process.env.LOG_LEVEL || "info",
-  format: combine(timestamp(), logFormat()),
-  transports: [consoleTransport],
-  exceptionHandlers: [new transports.Console()]
-});
-
 if (process.env.NODE_ENV === "development") {
   consoleTransport.level = "debug";
 }
@@ -24,6 +17,13 @@ if (process.env.NODE_ENV === "development") {
 if (process.env.NODE_ENV === "test") {
   consoleTransport.level = -1;
 }
+
+const logger = createLogger({
+  level: process.env.LOG_LEVEL || "info",
+  format: combine(timestamp(), logFormat()),
+  transports: [consoleTransport],
+  exceptionHandlers: [new transports.Console()]
+});
 
 function moduleLogger(module) {
   const { error, warn, info, verbose, debug, silly } = logger;
