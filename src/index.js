@@ -33,9 +33,15 @@ async function loop() {
       let prices = await api.fetchPrices(currencyPair);
 
       // Filter out failed API calls
-      const failedIndices = prices.filter(
-        (price, index) => price > 0 && price != undefined && price != NaN && index
+      const failedIndices = prices.map(
+        (price, index) => (price == 0 || price == undefined || price == NaN) && index
       );
+      if (failedIndices.length > 0) {
+        logger.log({
+          level: "debug",
+          message: "Failed indices: " + failedIndices.toString()
+        });
+      }
       prices = prices.filter((_, i) => !failedIndices.includes(i));
 
       // Get 24h trading volumes for all active APIs

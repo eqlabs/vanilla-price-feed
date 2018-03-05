@@ -17,11 +17,11 @@ const exchanges = {
 };
 
 module.exports.fetchPrices = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair].getPrice()));
+  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair] && exchanges[name][currencyPair].getPrice()));
 };
 
 module.exports.fetchVolumes = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair].getVolume()));
+  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair] && exchanges[name][currencyPair].getVolume()));
 };
 
 module.exports.exchanges = Object.keys(exchanges);
