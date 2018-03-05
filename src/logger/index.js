@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "test") {
 
 const logger = createLogger({
   level: process.env.LOG_LEVEL || "info",
-  format: combine(timestamp(), logFormat()),
+  format: combine(format.colorize(), timestamp(), logFormat()),
   transports: [consoleTransport],
   exceptionHandlers: [new transports.Console()]
 });

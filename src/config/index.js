@@ -14,7 +14,7 @@ module.exports.priceURLs = {
   BTCUSD: {
     bittrex: "https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC",
     bitfinex: "https://api.bitfinex.com/v2/tickers?symbols=tBTCUSD",
-    kraken: "https://api.kraken.com/0/public/Ticker?pair=BTCUSD",
+    kraken: "https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
     binance: "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
     poloniex: "https://api.bitfinex.com/v2/tickers?symbols=tBTCUSD",
     gdax: "https://api.gdax.com/products/BTC-USD/ticker"
@@ -34,7 +34,7 @@ module.exports.volumeURLs = {
   BTCUSD: {
     binance: "https://api.binance.com/api/v1/ticker/24hr?symbol=BTCUSDT",
     poloniex: "https://poloniex.com/public?command=return24hVolume",
-    kraken: "https://api.kraken.com/0/public/Ticker?pair=BTCUSD",
+    kraken: "https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
     bittrex:
       "https://bittrex.com/api/v1.1/public/getmarketsummary?market=usdt-btc",
     bitfinex: "https://api.bitfinex.com/v2/tickers?symbols=tBTCUSD",

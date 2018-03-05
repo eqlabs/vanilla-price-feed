@@ -17,11 +17,29 @@ const exchanges = {
 };
 
 module.exports.fetchPrices = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair] && exchanges[name][currencyPair].getPrice()));
+  return await Promise.all(Object.keys(exchanges).map(name => {
+    try {
+      return exchanges[name][currencyPair] && exchanges[name][currencyPair].getPrice();
+    } catch (e) {
+      logger.log({
+        level: "error",
+        message: "Error fetching price for " + currencyPair + " from " + name
+      });
+    }
+  }));
 };
 
 module.exports.fetchVolumes = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair] && exchanges[name][currencyPair].getVolume()));
+  return await Promise.all(Object.keys(exchanges).map(name => {
+    try {
+      return exchanges[name][currencyPair] && exchanges[name][currencyPair].getVolume();
+    } catch (e) {
+      logger.log({
+        level: "error",
+        message: "Error fetching 24h volume for " + currencyPair + " from " + name
+      });
+    }
+  }));
 };
 
 module.exports.exchanges = Object.keys(exchanges);
