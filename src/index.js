@@ -77,12 +77,12 @@ async function loop() {
       // Sum weighed prices together to reach a 100% weighed price
       const sum = calc.sum(weightedPrices);
 
-      // Push newest price to stack, taking a running average with previous prices
+      // Push newest price to stack, taking a moving average with previous prices
       if (Stack.prices[currencyPair] == undefined) {
         Stack.push(currencyPair, sum);
       } else {
-        const runningAVG = calc.mean(Stack.prices[currencyPair].concat([sum]));
-        Stack.push(currencyPair, runningAVG);
+        const movingAVG = calc.mean(Stack.prices[currencyPair].concat([sum]));
+        Stack.push(currencyPair, movingAVG);
       }
 
       // Print out the newest price
