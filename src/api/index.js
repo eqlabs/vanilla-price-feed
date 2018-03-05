@@ -1,12 +1,15 @@
 const binance = require("./binance");
 const bittrex = require("./bittrex");
+const bitfinex = require("./bitfinex");
+const poloniex = require("./poloniex");
+const kraken = require("./kraken");
 
-module.exports.fetchAll = async () => {
-  const exchanges = [bittrex, binance];
+const exchanges = [bittrex, binance, bitfinex, poloniex, kraken];
 
-  const prices = await Promise.all(
-    exchanges.map(exchange => exchange.getETHPrice())
-  );
+module.exports.fetchPrices = async () => {
+  return await Promise.all(exchanges.map(exchange => exchange.getETHPrice()));
+};
 
-  return prices;
+module.exports.fetchVolumes = async () => {
+  return await Promise.all(exchanges.map(exchange => exchange.getETHVolume()));
 };

@@ -20,6 +20,20 @@ module.exports.priceURLs = {
 };
 
 module.exports.volumeURLs = {
-  binance: "https://api.binance.com/api/v1/ticker/24hr?symbol=ETHUSDT",
-  poloniex: "https://poloniex.com/public?command=return24hVolume"
+  ETHUSD: {
+    binance: "https://api.binance.com/api/v1/ticker/24hr?symbol=ETHUSDT",
+    poloniex: "https://poloniex.com/public?command=return24hVolume",
+    kraken: "https://api.kraken.com/0/public/Ticker?pair=ETHUSD",
+    bittrex:
+      "https://bittrex.com/api/v1.1/public/getmarketsummary?market=usdt-eth",
+    bitfinex: "https://api.bitfinex.com/v2/tickers?symbols=tETHUSD"
+  },
+  BTCUSD: {
+    binance: "https://api.binance.com/api/v1/ticker/24hr?symbol=BTCUSDT",
+    poloniex: "https://poloniex.com/public?command=return24hVolume",
+    kraken: "https://api.kraken.com/0/public/Ticker?pair=BTCUSD",
+    bittrex:
+      "https://bittrex.com/api/v1.1/public/getmarketsummary?market=usdt-btc",
+    bitfinex: "https://api.bitfinex.com/v2/tickers?symbols=tBTCUSD"
+  }
 };

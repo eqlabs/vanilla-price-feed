@@ -1,15 +1,15 @@
 const config = require("../config");
 const fetchJSON = require("./fetchJSON");
 
-const ETHUSD = config.priceURLs.ETHUSD.binance;
-const VOLUME = config.volumeURLs.ETHUSD.binance;
+const ETHUSD = config.priceURLs.ETHUSD.bitfinex;
+const VOLUME = config.volumeURLs.ETHUSD.bitfinex;
 
 module.exports.getETHPrice = async () => {
   const response = await fetchJSON(ETHUSD);
-  return parseFloat(response.price);
+  return response[0][7];
 };
 
 module.exports.getETHVolume = async () => {
   const response = await fetchJSON(VOLUME);
-  return parseFloat(response.volume);
+  return response[0][8];
 };
