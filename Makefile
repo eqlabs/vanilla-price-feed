@@ -1,10 +1,13 @@
 .PHONY: dev build clear
 
 dev:
-	docker run -it --rm --name dev --link price-redis:redis price-ticker
+	make build-quiet && docker run -it --rm --name dev --link price-redis:redis price-ticker
 
 build:
 	docker build -t price-ticker .
+
+build-quiet:
+	docker build --quiet -t price-ticker . 
 
 redis:
 	docker run -d -p 6379:6379 --rm --name price-redis redis:latest

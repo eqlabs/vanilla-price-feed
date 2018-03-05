@@ -33,3 +33,7 @@ async function loop() {
 }
 
 loop();
+
+process.on("SIGINT", function() {
+  process.exit();
+});
