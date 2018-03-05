@@ -16,12 +16,12 @@ const exchanges = {
   "Gdax": gdax
 };
 
-module.exports.fetchPrices = async () => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name].getETHPrice()));
+module.exports.fetchPrices = async (currencyPair) => {
+  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair].getPrice()));
 };
 
-module.exports.fetchVolumes = async () => {
-  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name].getETHVolume()));
+module.exports.fetchVolumes = async (currencyPair) => {
+  return await Promise.all(Object.keys(exchanges).map(name => exchanges[name][currencyPair].getVolume()));
 };
 
 module.exports.exchanges = Object.keys(exchanges);
