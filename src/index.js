@@ -32,23 +32,26 @@ async function loop() {
       // Get prices from all active APIs
       let prices = await api.fetchPrices(currencyPair);
 
+      // Get 24h trading volumes for all active APIs
+      let volumes = await api.fetchVolumes(currencyPair);
+
       // Filter out failed API calls
       const failedIndices = prices.map(
-        (price, index) => (price == 0 || price == undefined || price == NaN) && index
+        (price, index) => {
+          return (price == 0 || price == undefined || isNaN(price) || volumes[index] == 0 || volumes[index] == undefined || isNaN(volumes[index])) ? index : false;
+        }
       );
-      if (failedIndices.length > 0) {
+
+      // Filter out failed API calls from data
+      volumes = volumes.filter((number, i) => !failedIndices.includes(i));
+      prices = prices.filter((number, i) => !failedIndices.includes(i));
+
+      if (failedIndices.find(index => index != false)) {
         logger.log({
           level: "debug",
           message: "Failed indices: " + failedIndices.toString()
         });
       }
-      prices = prices.filter((_, i) => !failedIndices.includes(i));
-
-      // Get 24h trading volumes for all active APIs
-      let volumes = await api.fetchVolumes(currencyPair);
-
-      // Filter out failed API price call indices from volume data
-      volumes = volumes.filter((_, i) => !failedIndices.includes(i));
 
       logger.log({
         level: "info",
