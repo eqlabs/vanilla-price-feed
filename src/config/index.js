@@ -1,5 +1,5 @@
 module.exports.env = {
-  POLL_INTERVAL: 15000
+  POLL_INTERVAL: 20000
 };
 
 module.exports.priceURLs = {

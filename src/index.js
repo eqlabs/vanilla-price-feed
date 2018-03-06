@@ -37,14 +37,14 @@ async function loop() {
 
       // Filter out failed API calls
       const failedIndices = prices.map(
-        (price, index) => {
-          return (price == 0 || price == undefined || isNaN(price) || volumes[index] == 0 || volumes[index] == undefined || isNaN(volumes[index])) ? index : false;
+        (exchange, index) => {
+          return (exchange.price == 0 || exchange.price == undefined || isNaN(exchange.price) || volumes[index].volume == 0 || volumes[index].volume == undefined || isNaN(volumes[index].volume)) ? index : false;
         }
       );
 
       // Filter out failed API calls from data
-      volumes = volumes.filter((number, i) => !failedIndices.includes(i));
-      prices = prices.filter((number, i) => !failedIndices.includes(i));
+      volumes = volumes.filter((exchange, i) => !failedIndices.includes(i));
+      prices = prices.filter((exchange, i) => !failedIndices.includes(i));
 
       if (failedIndices.find(index => index != false)) {
         logger.log({
@@ -55,23 +55,23 @@ async function loop() {
 
       logger.log({
         level: "info",
-        message: currencyPair + " prices fetched:" + api.exchanges.map((name, index) => ` ${name}: ${Math.round(prices[index])}$`
+        message: currencyPair + " prices fetched:" + prices.map(exchange => ` ${exchange.name}: ${Math.round(exchange.price)}$`
         )
       });
 
       logger.log({
         level: "info",
-        message: currencyPair + "24h volumes fetched:" + api.exchanges.map((name, index) => ` ${name}: ${Math.round(volumes[index])}$`
+        message: currencyPair + "24h volumes fetched:" + volumes.map(exchange => ` ${exchange.name}: ${Math.round(exchange.volume)}$`
         )
       });
 
       // Sum of volumes of all exchanges
-      const sumOfVolumes = calc.sum(volumes);
+      const sumOfVolumes = calc.sum(volumes.map(exchange => exchange.volume));
 
       // Weigh each price by its exchange's volume
-      const weightedPrices = prices.map((price, index) => {
-        const weight = volumes[index] / sumOfVolumes;
-        return price * weight;
+      const weightedPrices = prices.map((exchange, index) => {
+        const weight = volumes[index].volume / sumOfVolumes;
+        return exchange.price * weight;
       });
 
       // Sum weighed prices together to reach a 100% weighed price

@@ -17,7 +17,7 @@ const exchanges = {
 };
 
 module.exports.fetchPrices = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => {
+  const prices = await Promise.all(Object.keys(exchanges).map(name => {
     try {
       return exchanges[name][currencyPair] && exchanges[name][currencyPair].getPrice();
     } catch (e) {
@@ -27,10 +27,11 @@ module.exports.fetchPrices = async (currencyPair) => {
       });
     }
   }));
+  return Object.keys(exchanges).map((name, index) => ({ "name": name, "price": prices[index] }));
 };
 
 module.exports.fetchVolumes = async (currencyPair) => {
-  return await Promise.all(Object.keys(exchanges).map(name => {
+  const volumes = await Promise.all(Object.keys(exchanges).map(name => {
     try {
       return exchanges[name][currencyPair] && exchanges[name][currencyPair].getVolume();
     } catch (e) {
@@ -40,6 +41,7 @@ module.exports.fetchVolumes = async (currencyPair) => {
       });
     }
   }));
+  return Object.keys(exchanges).map((name, index) => ({ "name": name, "volume": volumes[index] }));
 };
 
 module.exports.exchanges = Object.keys(exchanges);
