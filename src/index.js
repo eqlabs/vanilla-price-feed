@@ -53,44 +53,50 @@ async function loop() {
         });
       }
 
-      logger.log({
-        level: "info",
-        message: currencyPair + " prices fetched:" + prices.map(exchange => ` ${exchange.name}: ${Math.round(exchange.price)}$`
-        )
-      });
+      if (volumes.length >= 2 && volumes.length === prices.length) {
 
-      logger.log({
-        level: "info",
-        message: currencyPair + "24h volumes fetched:" + volumes.map(exchange => ` ${exchange.name}: ${Math.round(exchange.volume)}$`
-        )
-      });
+        logger.log({
+          level: "info",
+          message: currencyPair + " prices fetched:" + prices.map(exchange => ` ${exchange.name}: ${Math.round(exchange.price)}$`
+          )
+        });
 
-      // Sum of volumes of all exchanges
-      const sumOfVolumes = calc.sum(volumes.map(exchange => exchange.volume));
+        logger.log({
+          level: "info",
+          message: currencyPair + "24h volumes fetched:" + volumes.map(exchange => ` ${exchange.name}: ${Math.round(exchange.volume)}$`
+          )
+        });
 
-      // Weigh each price by its exchange's volume
-      const weightedPrices = prices.map((exchange, index) => {
-        const weight = volumes[index].volume / sumOfVolumes;
-        return exchange.price * weight;
-      });
+        // Sum of volumes of all exchanges
+        const sumOfVolumes = calc.sum(volumes.map(exchange => exchange.volume));
 
-      // Sum weighed prices together to reach a 100% weighed price
-      const sum = calc.sum(weightedPrices);
+        // Weigh each price by its exchange's volume
+        const weightedPrices = prices.map((exchange, index) => {
+          const weight = volumes[index].volume / sumOfVolumes;
+          return exchange.price * weight;
+        });
 
-      // Push newest price to stack, taking a moving average with previous prices
-      if (Stack.prices[currencyPair] == undefined) {
-        Stack.push(currencyPair, sum);
+        // Sum weighed prices together to reach a 100% weighed price
+        const sum = calc.sum(weightedPrices);
+
+        // Push newest price to stack, taking a moving average with previous prices
+        if (Stack.prices[currencyPair] == undefined) {
+          Stack.push(currencyPair, sum);
+        } else {
+          const movingAVG = calc.mean(Stack.prices[currencyPair].concat([sum]));
+          Stack.push(currencyPair, movingAVG);
+        }
+
+        // Print out the newest price
+        logger.log({
+          level: "info",
+          message: "Latest " + currencyPair + " price calculated: " + Stack.prices[currencyPair][Stack.prices[currencyPair].length - 1]
+        });
+
       } else {
-        const movingAVG = calc.mean(Stack.prices[currencyPair].concat([sum]));
-        Stack.push(currencyPair, movingAVG);
+        // Wait and think what you've done (too many requests, duh)
+        await timeout(config.env.POLL_INTERVAL * 3);
       }
-
-      // Print out the newest price
-      logger.log({
-        level: "info",
-        message: "Latest " + currencyPair + " price calculated: " + Stack.prices[currencyPair][Stack.prices[currencyPair].length - 1]
-      });
-
       // Wait for POLL_INTERVAL
       await timeout(config.env.POLL_INTERVAL);
     } catch (e) {
