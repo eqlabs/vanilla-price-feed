@@ -92,7 +92,7 @@ async function loop() {
         // Print out the newest price
         logger.log({
           level: "info",
-          message: "Latest " + currencyPair + " price calculated: " + sum
+          message: "Latest " + currencyPair + " price calculated: " + movingAVG
         });
 
         // Store new price to redis
