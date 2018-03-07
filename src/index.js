@@ -1,7 +1,6 @@
 const config = require("./config");
 const api = require("./api");
 const calc = require("./calc");
-const Stack = require("./mem");
 const { redis } = require("./db");
 const logger = require("./logger")(module);
 
@@ -80,11 +79,14 @@ async function loop() {
         // Sum weighed prices together to reach a 100% weighed price
         const sum = calc.sum(weightedPrices);
 
+        // Get this time in seconds
         const time = Math.trunc(new Date().getTime() / 1000);
 
+        // Fetch prices from last 15 minutes (900 seconds before now), add newest price to list
         let pricesOfLast15Minutes = await redis.zrangebyscore(currencyPair, time - 900, time);
         pricesOfLast15Minutes = pricesOfLast15Minutes.map(price => parseFloat(price)).concat(sum);
 
+        // Calculate the moving average of last 15 minutes
         const movingAVG = pricesOfLast15Minutes.length > 0 ? calc.mean(pricesOfLast15Minutes) : sum;
 
         // Print out the newest price
@@ -93,6 +95,7 @@ async function loop() {
           message: "Latest " + currencyPair + " price calculated: " + sum
         });
 
+        // Store new price to redis
         await redis.zadd(currencyPair, time, JSON.stringify(movingAVG));
 
       } else {
