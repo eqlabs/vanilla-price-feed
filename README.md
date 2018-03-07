@@ -3,7 +3,7 @@
   - ETH/USD
   - BTC/USD
 
-...from the following exchanges:
+...from the following exchanges' public APIs:
   - Binance
   - Gdax
   - Poloniex
