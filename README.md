@@ -1,15 +1,15 @@
 ## Price feed for Vanilla oracle
 1. Fetches latest prices for following currency pairs:
-- ETH/USD
-- BTC/USD
+  - ETH/USD
+  - BTC/USD
 
 ...from the following exchanges:
-- Binance
-- Gdax
-- Poloniex
-- Bitfinex
-- Kraken
-- Bittrex
+  - Binance
+  - Gdax
+  - Poloniex
+  - Bitfinex
+  - Kraken
+  - Bittrex
 
 ...with their accompanying 24h trade volumes.
 
