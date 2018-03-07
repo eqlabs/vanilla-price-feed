@@ -5,14 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
+    "build": "pkg --targets linux -d .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "pkg": {
+    "scripts": "node_modules/**/*.js"
+  },
+  "bin": "src/index.js",
+  "author": "Equilibrium Labs",
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.0.0",
     "redis": "^2.8.0",
     "winston": "^3.0.0-rc1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "pkg": "^4.3.0"
+  }
 }
