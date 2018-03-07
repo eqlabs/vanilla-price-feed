@@ -56,13 +56,13 @@ async function loop() {
       if (volumes.length >= 2 && volumes.length === prices.length) {
 
         logger.log({
-          level: "info",
+          level: "debug",
           message: currencyPair + " prices fetched:" + prices.map(exchange => ` ${exchange.name}: ${Math.round(exchange.price)}$`
           )
         });
 
         logger.log({
-          level: "info",
+          level: "debug",
           message: currencyPair + "24h volumes fetched:" + volumes.map(exchange => ` ${exchange.name}: ${Math.round(exchange.volume)}$`
           )
         });

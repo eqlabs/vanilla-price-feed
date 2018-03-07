@@ -1,6 +1,6 @@
 module.exports.env = {
   POLL_INTERVAL: 30000,
-  DB_URL: "price-redis",
+  DB_URL: process.env.NODE_ENV === "development" ? "price-redis" : "localhost",
   DB_PORT: "6379"
 };
 
