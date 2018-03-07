@@ -1,5 +1,7 @@
 module.exports.env = {
-  POLL_INTERVAL: 20000
+  POLL_INTERVAL: 30000,
+  DB_URL: "price-redis",
+  DB_PORT: "6379"
 };
 
 module.exports.priceURLs = {

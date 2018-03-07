@@ -2,6 +2,7 @@ const config = require("./config");
 const api = require("./api");
 const calc = require("./calc");
 const Stack = require("./mem");
+const { redis } = require("./db");
 const logger = require("./logger")(module);
 
 /**
@@ -79,19 +80,20 @@ async function loop() {
         // Sum weighed prices together to reach a 100% weighed price
         const sum = calc.sum(weightedPrices);
 
-        // Push newest price to stack, taking a moving average with previous prices
-        if (Stack.prices[currencyPair] == undefined) {
-          Stack.push(currencyPair, sum);
-        } else {
-          const movingAVG = calc.mean(Stack.prices[currencyPair].concat([sum]));
-          Stack.push(currencyPair, movingAVG);
-        }
+        const time = Math.trunc(new Date().getTime() / 1000);
+
+        let pricesOfLast15Minutes = await redis.zrangebyscore(currencyPair, time - 900, time);
+        pricesOfLast15Minutes = pricesOfLast15Minutes.map(price => parseFloat(price)).concat(sum);
+
+        const movingAVG = pricesOfLast15Minutes.length > 0 ? calc.mean(pricesOfLast15Minutes) : sum;
 
         // Print out the newest price
         logger.log({
           level: "info",
-          message: "Latest " + currencyPair + " price calculated: " + Stack.prices[currencyPair][Stack.prices[currencyPair].length - 1]
+          message: "Latest " + currencyPair + " price calculated: " + sum
         });
+
+        await redis.zadd(currencyPair, time, JSON.stringify(movingAVG));
 
       } else {
         // Wait and think what you've done (too many requests, duh)
