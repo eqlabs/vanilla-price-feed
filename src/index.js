@@ -102,6 +102,11 @@ async function loop() {
         // Wait and think what you've done (too many requests, duh)
         await timeout(config.env.POLL_INTERVAL * 3);
       }
+
+      // Remove prices older than 12 hours (720 minutes) from redis
+      const keepAmount = 60000 / config.env.POLL_INTERVAL * 720;
+      await redis.zremrangebyrank(currencyPair, 0, -keepAmount);
+
       // Wait for POLL_INTERVAL
       await timeout(config.env.POLL_INTERVAL);
     } catch (e) {

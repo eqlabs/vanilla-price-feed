@@ -5,6 +5,7 @@ const client = redis.createClient({ host: config.env.DB_URL, port: config.env.DB
 const { promisify } = require('util');
 const zrangebyscore = promisify(client.zrangebyscore).bind(client);
 const zadd = promisify(client.zadd).bind(client);
+const zremrangebyrank = promisify(client.zremrangebyrank).bind(client);
 
 client.on("error", function (err) {
   logger.log({
@@ -20,5 +21,8 @@ module.exports.redis = {
   zrangebyscore: async (key, start, stop) => {
     const values = await zrangebyscore(key, start, stop);
     return values;
+  },
+  zremrangebyrank: async (key, start, stop) => {
+    await zremrangebyrank(key, start, stop);
   }
 }
