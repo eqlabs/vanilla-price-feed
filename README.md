@@ -1,3 +1,4 @@
+![Vanilla Logo](vanilla.png)
 ## Price feed for Vanilla oracle
 1. Fetches latest prices for following currency pairs:
   - ETH/USD
